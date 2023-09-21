@@ -11,4 +11,9 @@ print("This is commit for nothing")
 
 # COMMAND ----------
 
+import time
+time.sleep(10)
+
+# COMMAND ----------
+
 
