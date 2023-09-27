@@ -4,28 +4,27 @@
 #os.environ['DATABRICKS_TOKEN'] = dbutils.notebook.entry_point.getDbutils().notebook().getContext().apiToken().getOrElse(None)
 
 # COMMAND ----------
+import sys
+from pathlib import Path
 
-new_cluster_config = """
-{
-    "spark_version": "7.3.x-scala2.12",
-    "node_type_id": "i3.xlarge",
-    "aws_attributes": {
-      "availability": "ON_DEMAND"
-    },
-    "num_workers": 2
-}
-"""
-# Existing cluster ID where integration test will be executed
-existing_cluster_id = '0804-220509-stead130'
+
+sys.path.append(Path(__file__).parent)
+
+new_cluster_config = open("config/new_cluster_config.json", "r").read()
+
+import configparser
+
+config = configparser.ConfigParser()
+config.read("config/config.ini")
+
+existing_cluster_id = config["TRAINING"]["existing_cluster_id"]
 # Path to the notebook with the integration test
-notebook_path = '/test/unittest_model'
-repo_path = '/Repos/michael.shtelma@databricks.com/databricks_ml_demo'
-
-
-repos_path_prefix='/Repos/michael.shtelma@databricks.com/databricks_ml_demo'
-git_url = 'https://github.com/mshtelma/databricks_ml_demo'
-provider = 'gitHub'
-branch = 'main'
+notebook_path = config["TRAINING"]["notebook_path"]
+repo_path = config["TRAINING"]["repo_path"]
+repos_path_prefix = config["TRAINING"]["repo_path_prefix"]
+git_url = config["TRAINING"]["git_url"]
+provider = config["TRAINING"]["provider"]
+branch = config["TRAINING"]["branch"]
 
 # COMMAND ----------
 
