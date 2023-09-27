@@ -1,4 +1,49 @@
 # Databricks notebook source
+#import os
+#os.environ['DATABRICKS_HOST'] = 'https://eastus2.azuredatabricks.net/'
+#os.environ['DATABRICKS_TOKEN'] = dbutils.notebook.entry_point.getDbutils().notebook().getContext().apiToken().getOrElse(None)
+
+# COMMAND ----------
+
+new_cluster_config = """
+{
+    "spark_version": "7.3.x-scala2.12",
+    "node_type_id": "i3.xlarge",
+    "aws_attributes": {
+      "availability": "ON_DEMAND"
+    },
+    "num_workers": 2
+}
+"""
+# Existing cluster ID where integration test will be executed
+existing_cluster_id = '0804-220509-stead130'
+# Path to the notebook with the integration test
+notebook_path = '/test/unittest_model'
+repo_path = '/Repos/michael.shtelma@databricks.com/databricks_ml_demo'
+
+
+repos_path_prefix='/Repos/michael.shtelma@databricks.com/databricks_ml_demo'
+git_url = 'https://github.com/mshtelma/databricks_ml_demo'
+provider = 'gitHub'
+branch = 'main'
+
+# COMMAND ----------
+
+from argparse import ArgumentParser
+import sys
+p = ArgumentParser()
+
+p.add_argument("--branch_name", required=False, type=str)
+p.add_argument("--pr_branch", required=False, type=str)
+
+namespace = p.parse_known_args(sys.argv + [ '', ''])[0]
+branch_name = namespace.branch_name
+print('Branch Name: ', branch_name)
+pr_branch = namespace.pr_branch
+print('PR Branch: ', pr_branch)
+
+# COMMAND ----------
+
 import json
 import time
 from datetime import datetime
@@ -6,14 +51,6 @@ from datetime import datetime
 from databricks_cli.configure.config import _get_api_client
 from databricks_cli.configure.provider import EnvironmentVariableConfigProvider
 from databricks_cli.sdk import JobsService, ReposService
-
-
-# COMMAND ----------
-
-
-
-# COMMAND ----------
-
 
 # Let's create Databricks CLI API client to be able to interact with Databricks REST API
 config = EnvironmentVariableConfigProvider().get_config()
