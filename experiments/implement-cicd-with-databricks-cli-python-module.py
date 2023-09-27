@@ -170,6 +170,8 @@ print('Checking out the following repo: ', repo_path)
 # Let's clone our GitHub Repo in Databricks using Repos API
 repo = repos_service.create_repo(url=git_url, provider=provider, path=repo_path)
 
+# COMMAND ----------
+
 try:
   repos_service.update_repo(id=repo['id'], branch=branch)
 
@@ -196,4 +198,16 @@ try:
       else:
           time.sleep(5)
 finally:
-  repos_service.delete_repo(id=repo['id'])
+    print("Done")
+
+# COMMAND ----------
+
+repos_service.delete_repo(id=repo['id'])
+
+# COMMAND ----------
+
+from databricks_cli.pipelines
+
+# COMMAND ----------
+
+

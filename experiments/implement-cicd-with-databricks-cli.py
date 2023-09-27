@@ -245,4 +245,7 @@
 
 # COMMAND ----------
 
-
+# MAGIC %sh
+# MAGIC echo $HOST
+# MAGIC echo $
+# MAGIC curl -v -X GET -H "Authorization: Bearer <PAT Token>" "https://<workspace>.databricks.com/api/2.0/unity-catalog/metastores/<metastore-id>/systemschemas"
