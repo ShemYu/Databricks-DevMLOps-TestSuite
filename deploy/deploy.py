@@ -70,6 +70,7 @@ _b = branch.replace('/','_')
 repo_path = f'{repos_path_prefix}_{_b}_{str(datetime.now().microsecond)}'
 print('Checking out the following repo: ', repo_path)
 
+print(git_url, provider, repo_path)
 # Let's clone our GitHub Repo in Databricks using Repos API
 repo = repos_service.create_repo(url=git_url, provider=provider, path=repo_path)
 
