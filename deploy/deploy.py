@@ -21,7 +21,7 @@ existing_cluster_id = config["TRAINING"]["existing_cluster_id"]
 # Path to the notebook with the integration test
 notebook_path = config["TRAINING"]["notebook_path"]
 repo_path = config["TRAINING"]["repo_path"]
-repos_path_prefix = config["TRAINING"]["repo_path_prefix"]
+repos_path_prefix = config["TRAINING"]["repos_path_prefix"]
 git_url = config["TRAINING"]["git_url"]
 provider = config["TRAINING"]["provider"]
 branch = config["TRAINING"]["branch"]
