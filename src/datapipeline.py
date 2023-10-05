@@ -4,6 +4,8 @@ from pyspark.sql.types import *
 from databricks.feature_store import feature_table
 from databricks.feature_store import FeatureStoreClient
 
+table_name = "databricks_test_mr_df"
+
 
 # COMMAND ----------
 
@@ -169,7 +171,7 @@ df.show(n=5)
 
 # COMMAND ----------
 
-table_name = "databricks_test_mr_df"
+
 fs = FeatureStoreClient()
 df = merge_all()
 mr_feature_table = fs.create_table(
