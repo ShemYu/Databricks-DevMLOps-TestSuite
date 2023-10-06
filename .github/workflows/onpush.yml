@@ -17,9 +17,6 @@ jobs:
     env:
       DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
       DATABRICKS_TOKEN:  ${{ secrets.DATABRICKS_TOKEN }}
-    
-    outputs:
-      jobid: ${{ steps.ste-output.outputs.jobid }}
 
     steps:
       - uses: actions/checkout@v1
@@ -44,13 +41,12 @@ jobs:
           echo "token = $DATABRICKS_TOKEN" >> ~/.databrickscfg
 
       - name: Deploy integration test
+        id: deploy
         run: |
           python deploy/deploy_pysdk.py  --branch_name ${GITHUB_REF#refs/heads/}  --pr_branch ${GITHUB_REF#refs/heads/}
-
-      - name: Set Output Value
-        id: set-output
-        run: echo "JOBID=$JOBID" >> $GITHUB_OUTPUT
       
+      outputs:
+        jobid: ${{ steps.deploy.outputs.JOBID }}
       
   run_CT_pipeline:
     runs-on: ubuntu-latest
