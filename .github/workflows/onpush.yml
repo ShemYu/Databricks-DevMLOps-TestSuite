@@ -9,7 +9,7 @@ on:
 
 jobs:
   deploy_CT_pipeline:
-
+    id: deploy
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 4
@@ -50,7 +50,7 @@ jobs:
       
   run_CT_pipeline:
     runs-on: ubuntu-latest
-    needs:  deploy_CT_pipeline
+    needs: deploy
     strategy:
       max-parallel: 4
 
@@ -64,6 +64,6 @@ jobs:
 
     - name: Use the Output from Previous Job
       run: |
-        echo "Received Env Var: ${{ needs.deploy_CT_pipeline.outputs.jobid }}"
+        echo "Received Env Var: ${{ needs.deploy.outputs.jobid }}"
         # If you want to use it as an environment variable in a subsequent step:
-        echo "JOBID=${{ needs.deploy_CT_pipeline.outputs.jobid }}" >> $GITHUB_ENV
+        echo "JOBID=${{ needs.deploy.outputs.jobid }}" >> $GITHUB_ENV
