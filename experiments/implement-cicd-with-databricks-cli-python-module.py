@@ -24,6 +24,7 @@
 
 # Databricks notebook source
 import os
+
 os.environ['DATABRICKS_HOST'] = "https://dbc-75330423-305e.cloud.databricks.com/"
 os.environ['DATABRICKS_TOKEN'] = "dapie2abca78cf1cae76d3e5fa979ea735bf"
 
@@ -116,9 +117,10 @@ branch = 'main'
 
 # COMMAND ----------
 
+import sys
 # COMMAND ----------
 from argparse import ArgumentParser
-import sys
+
 p = ArgumentParser()
 
 p.add_argument("--branch_name", required=False, type=str)

@@ -11,9 +11,8 @@ dbutils.library.restartPython()
 
 import os
 
-
-HOST = "https://dbc-75330423-305e.cloud.databricks.com/"
-TOKEN = "dapie2abca78cf1cae76d3e5fa979ea735bf"
+HOST="https://dbc-75330423-305e.cloud.databricks.com/"
+TOKEN="dapie2abca78cf1cae76d3e5fa979ea735bf"
 
 
 from databricks.sdk import WorkspaceClient
@@ -35,8 +34,6 @@ for f in d:
 import sys
 from pathlib import Path
 
-
-
 new_cluster_config = open("../config/new_cluster_config.json", "r").read()
 
 import configparser
@@ -55,8 +52,7 @@ branch = config["TRAINING"]["branch"]
 
 # COMMAND ----------
 
-from databricks.sdk.service.jobs import Task, NotebookTask, Source, GitSource
-
+from databricks.sdk.service.jobs import GitSource, NotebookTask, Source, Task
 
 job_name            = "databricks-sdk-testing"
 description         = "Testing jobs"
@@ -105,6 +101,8 @@ j = w.jobs.create(
 )
 
 print(f"View the job at {w.config.host}/#job/{j.job_id}\n")
+
+os.environ.setdefault("JOBID", j.job_id)
 
 # COMMAND ----------
 
