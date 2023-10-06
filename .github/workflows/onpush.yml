@@ -49,7 +49,7 @@ jobs:
 
       - name: Set Output Value
         id: set-output
-        run: echo "::set-output name=jobid::${{ env.JOBID }}"
+        run: echo "JOBID=$JOBID" >> $GITHUB_OUTPUT
       
       
   run_CT_pipeline:
