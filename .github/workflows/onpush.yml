@@ -42,7 +42,7 @@ jobs:
 
       - name: Deploy integration test
         run: |
-          python deploy/deploy.py  --branch_name ${GITHUB_REF#refs/heads/}  --pr_branch ${GITHUB_REF#refs/heads/}
+          python deploy/deploy_pysdk.py  --branch_name ${GITHUB_REF#refs/heads/}  --pr_branch ${GITHUB_REF#refs/heads/}
 
      
 
