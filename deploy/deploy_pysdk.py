@@ -73,7 +73,7 @@ training = Task(
     existing_cluster_id = existing_cluster_id,
     notebook_task = NotebookTask(
         base_parameters = dict(""),
-        notebook_path = feature_engineering_notebook_path,
+        notebook_path = training_notebook_path,
         source = Source("GIT")
     ),
 )
