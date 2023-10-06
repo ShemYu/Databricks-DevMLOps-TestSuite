@@ -32,7 +32,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install databricks_cli
+          pip install databricks_cli databricks-sdk
 
       - name: Prepare profile
         run: |
