@@ -46,4 +46,4 @@ jobs:
 
       - name: Run CT pipeline
         run: |
-          echo $JOBID
+          echo "$JOBID"
