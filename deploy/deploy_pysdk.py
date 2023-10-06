@@ -67,7 +67,7 @@ feature_engineering = Task(
     ),
 )
 training = Task(
-    task_key="feature-engineering",
+    task_key="training",
     description = training_description,
     existing_cluster_id = existing_cluster_id,
     notebook_task = NotebookTask(
