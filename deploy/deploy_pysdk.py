@@ -91,3 +91,4 @@ j = w.jobs.create(
 )
 # print(f"View the job at {w.config.host}/#job/{j.job_id}\n")
 os.environ.setdefault("JOBID", j.job_id.__str__())
+print(os.environ.get("JOBID"))
