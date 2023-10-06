@@ -8,7 +8,7 @@ on:
       - 'v*' # this tag type is used for release pipelines
 
 jobs:
-  deploy_CT_pipeline:
+  CT_pipeline:
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 4
@@ -39,30 +39,11 @@ jobs:
           echo "host = $DATABRICKS_HOST" >> ~/.databrickscfg
           echo "token = $DATABRICKS_TOKEN" >> ~/.databrickscfg
 
-      - name: Deploy integration test
+      - name: Deploy CT pipeline
         id: deploy
         run: |
           python deploy/deploy_pysdk.py  --branch_name ${GITHUB_REF#refs/heads/}  --pr_branch ${GITHUB_REF#refs/heads/}
-      
-    outputs:
-      jobid: ${{ steps.deploy.outputs.JOBID }}
-      
-  run_CT_pipeline:
-    runs-on: ubuntu-latest
-    needs: deploy_CT_pipeline
-    strategy:
-      max-parallel: 4
 
-    env:
-      DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
-      DATABRICKS_TOKEN:  ${{ secrets.DATABRICKS_TOKEN }}
-      
-    steps:
-    - name: Check Out Code
-      uses: actions/checkout@v2
-
-    - name: Use the Output from Previous Job
-      run: |
-        echo "Received Env Var: ${{ needs.deploy_CT_pipeline.outputs.jobid }}"
-        # If you want to use it as an environment variable in a subsequent step:
-        echo "JOBID=${{ needs.deploy_CT_pipeline.outputs.jobid }}" >> $GITHUB_ENV
+      - name: Run CT pipeline
+        run: |
+          echo $JOBID
