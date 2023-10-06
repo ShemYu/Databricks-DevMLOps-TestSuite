@@ -45,8 +45,8 @@ jobs:
         run: |
           python deploy/deploy_pysdk.py  --branch_name ${GITHUB_REF#refs/heads/}  --pr_branch ${GITHUB_REF#refs/heads/}
       
-      outputs:
-        jobid: ${{ steps.deploy.outputs.JOBID }}
+    outputs:
+      jobid: ${{ steps.deploy.outputs.JOBID }}
       
   run_CT_pipeline:
     runs-on: ubuntu-latest
