@@ -90,4 +90,4 @@ j = w.jobs.create(
   git_source=git_config
 )
 # print(f"View the job at {w.config.host}/#job/{j.job_id}\n")
-os.environ.setdefault("JOBID", j.job_id)
+os.environ.setdefault("JOBID", j.job_id.__str__())
