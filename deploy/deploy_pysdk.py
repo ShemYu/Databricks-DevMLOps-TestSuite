@@ -2,7 +2,7 @@ import os
 import sys
 from pathlib import Path
 import configparser
-from databricks.sdk.service.jobs import Task, NotebookTask, Source, GitSource, GitProvider
+from databricks.sdk.service.jobs import Task, NotebookTask, Source, GitSource, GitProvider, TaskDependency
 from databricks.sdk import WorkspaceClient
 from argparse import ArgumentParser
 
@@ -68,6 +68,7 @@ feature_engineering = Task(
 )
 training = Task(
     task_key="training",
+    depends_on=TaskDependency("feautre-engineering")
     description = training_description,
     existing_cluster_id = existing_cluster_id,
     notebook_task = NotebookTask(
@@ -76,6 +77,7 @@ training = Task(
         source = Source("GIT")
     ),
 )
+
 
 print("Attempting to create the job. Please wait...\n")
 
