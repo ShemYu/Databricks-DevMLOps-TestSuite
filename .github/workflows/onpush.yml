@@ -43,6 +43,10 @@ jobs:
         id: deploy
         run: |
           python deploy/deploy_pysdk.py  --branch_name ${GITHUB_REF#refs/heads/}  --pr_branch ${GITHUB_REF#refs/heads/}
+        with:
+          mode: set
+          name: JOBID
+          value: $JOBID
       
     outputs:
       jobid: ${{ steps.deploy.outputs.JOBID }}
