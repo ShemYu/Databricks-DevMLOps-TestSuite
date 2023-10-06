@@ -6,7 +6,6 @@ from databricks.feature_store import FeatureStoreClient
 
 table_name = "databricks_test_mr_df"
 
-
 # COMMAND ----------
 
 # MAGIC %md
