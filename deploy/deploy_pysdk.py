@@ -68,7 +68,7 @@ feature_engineering = Task(
 )
 training = Task(
     task_key="training",
-    depends_on=TaskDependency(task_key="feautre-engineering"),
+    depends_on=[TaskDependency(task_key="feautre-engineering")],
     description = training_description,
     existing_cluster_id = existing_cluster_id,
     notebook_task = NotebookTask(
