@@ -46,4 +46,4 @@ jobs:
 
       - name: Run CT pipeline
         run: |
-          echo "$JOBID"
+          python deploy/run_pysdk.py
