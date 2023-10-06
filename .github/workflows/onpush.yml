@@ -68,6 +68,6 @@ jobs:
 
     - name: Use the Output from Previous Job
       run: |
-        echo "Received Env Var: ${{ needs.deploy_CT_pipeline.outputs.myEnvVar }}"
+        echo "Received Env Var: ${{ needs.deploy_CT_pipeline.outputs.jobid }}"
         # If you want to use it as an environment variable in a subsequent step:
-        echo "MY_ENV=${{ needs.deploy_CT_pipeline.outputs.myEnvVar }}" >> $GITHUB_ENV
+        echo "JOBID=${{ needs.deploy_CT_pipeline.outputs.jobid }}" >> $GITHUB_ENV
