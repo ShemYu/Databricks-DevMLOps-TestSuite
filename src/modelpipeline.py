@@ -1,7 +1,24 @@
 # Databricks notebook source
+import mlflow
 # %run /Users/sandy1990418@gmail.com/datapipeline
 feature_table_name = "databricks_test_mr_df"
-run_name = "SandyMRRandomForestCalssifier"
+project_name = "SandyMRRandomForestCalssifier"
+exp_name = f"/Users/shauns4y@gmail.com/{project_name}"
+
+# COMMAND ----------
+
+try:
+    exp_id = mlflow.create_experiment(exp_name)
+except Exception as e:
+    exp_id = mlflow.get_experiment_by_name(exp_name).experiment_id
+exp_id
+
+# COMMAND ----------
+
+mlflow.set_experiment(experiment_id=exp_id)
+
+# COMMAND ----------
+
 df = spark.sql(f"SELECT * FROM {feature_table_name}")
 
 # COMMAND ----------
@@ -188,7 +205,7 @@ def objective_function(params):
     max_depth = params["max_depth"]
     num_trees = params["num_trees"]
     ## need nested = True
-    with mlflow.start_run(nested=True, run_name=run_name):
+    with mlflow.start_run(nested=True):
         estimator = modelpipeline.copy({rf.maxDepth: max_depth, rf.numTrees: num_trees})
         model = estimator.fit(train_df)
 
@@ -229,7 +246,7 @@ import mlflow.spark
 # tpe.suggest = search algorithm
 num_evals = 4
 trials = Trials()
-with mlflow.start_run(run_name=run_name):
+with mlflow.start_run():
     mlflow.pyspark.ml.autolog(log_models=True)
     best_hyperparam = fmin(fn=objective_function, 
                         space=search_space,
@@ -246,11 +263,32 @@ mlflow.end_run()
 
 # COMMAND ----------
 
+runs = mlflow.search_runs(
+    experiment_ids=[exp_id],
+)
+for idx, run in runs.iterrows():
+    print(run.)
+
+# COMMAND ----------
+
+for idx, run in runs.iterrows():
+    model_uri = f"runs:/{run.run_id}/model"
+    result = mlflow.evaluate(
+       model_uri,
+       test_df,
+       targets='lag_sum_totalIndex',
+       model_type="classifier",
+       evaluators=["default"],
+    )
+
+# COMMAND ----------
+
 import mlflow
 
 # temp_tes = datapipeline.transform(test_df)
 # infer 
-with mlflow.start_run(nested=True, run_name=run_name) as run:
+
+with mlflow.start_run(nested=True) as run:
 #    model_info = mlflow.spark.log_model(pipeline_model.bestModel, "model")
     result = mlflow.evaluate(
        'runs:/4f8ce8bdfa104a8387fc3a1f0d629447/model',
