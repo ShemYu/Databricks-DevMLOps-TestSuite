@@ -4,6 +4,7 @@ import mlflow
 feature_table_name = "databricks_test_mr_df"
 project_name = "SandyMRRandomForestCalssifier"
 exp_name = f"/Users/shauns4y@gmail.com/{project_name}"
+model_name = "testing_model"
 
 # COMMAND ----------
 
@@ -15,7 +16,8 @@ exp_id
 
 # COMMAND ----------
 
-mlflow.set_experiment(experiment_id=exp_id)
+exp_info = mlflow.set_experiment(experiment_id=exp_id)
+exp_info
 
 # COMMAND ----------
 
