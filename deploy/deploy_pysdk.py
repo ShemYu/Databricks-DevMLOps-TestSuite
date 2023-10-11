@@ -79,6 +79,7 @@ training = Task(
 )
 
 
+
 print("Attempting to create the job. Please wait...\n")
 
 j = w.jobs.create(
@@ -92,3 +93,10 @@ j = w.jobs.create(
 # print(f"View the job at {w.config.host}/#job/{j.job_id}\n")
 os.environ.setdefault("JOBID", j.job_id.__str__())
 print(os.environ.get("JOBID"))
+
+
+ct_job = w.jobs.get(job_id=j.job_id)
+print(ct_job)
+run = w.jobs.run_now_and_wait(job_id=j.job_id)
+print(run)
+

@@ -44,6 +44,6 @@ jobs:
         run: |
           python deploy/deploy_pysdk.py  --branch_name ${GITHUB_REF#refs/heads/}  --pr_branch ${GITHUB_REF#refs/heads/}
 
-      - name: Run CT pipeline
-        run: |
-          python deploy/run_pysdk.py
+      # - name: Run CT pipeline
+      #   run: |
+      #     python deploy/run_pysdk.py
