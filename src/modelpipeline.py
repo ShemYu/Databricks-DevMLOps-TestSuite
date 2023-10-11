@@ -4,6 +4,7 @@ import mlflow
 feature_table_name = "databricks_test_mr_df"
 project_name = "SandyMRRandomForestCalssifier"
 exp_name = f"/Users/shauns4y@gmail.com/{project_name}"
+tunning_step_run = "tunning"
 model_name = "testing_model"
 
 # COMMAND ----------
@@ -248,7 +249,7 @@ import mlflow.spark
 # tpe.suggest = search algorithm
 num_evals = 4
 trials = Trials()
-with mlflow.start_run():
+with mlflow.start_run(run_name=tunning_step_run):
     mlflow.pyspark.ml.autolog(log_models=True)
     best_hyperparam = fmin(fn=objective_function, 
                         space=search_space,
@@ -265,45 +266,46 @@ mlflow.end_run()
 
 # COMMAND ----------
 
-runs = mlflow.search_runs(
-    experiment_ids=[exp_id],
-)
-for idx, run in runs.iterrows():
-    print(run.)
+import mlflow
+
+
+tunning_step_run = "tunning"
+runs = mlflow.search_runs(exp_id, filter_string=f"tags.mlflow.runName='{tunning_step_run}'")
+runs.run_id
+
+# COMMAND ----------
+
+# runs = mlflow.search_runs(filter_string=f"tags.mlflow.parentRunId='{runs.run_id[0]}'")
+run_id = "5cfe23b617184cb2afd283b661870379"
+runs = mlflow.search_runs(filter_string=f"tags.mlflow.parentRunId='{run_id}'")
+runs
+
+# COMMAND ----------
+
+test_df.show(1)
 
 # COMMAND ----------
 
 for idx, run in runs.iterrows():
     model_uri = f"runs:/{run.run_id}/model"
     result = mlflow.evaluate(
-       model_uri,
-       test_df,
-       targets='lag_sum_totalIndex',
-       model_type="classifier",
-       evaluators=["default"],
+        model_uri,
+        test_df,
+        targets='lag_sum_totalIndex',
+        model_type="classifier",
+        evaluators=["default"],
     )
 
 # COMMAND ----------
 
-import mlflow
+runs = mlflow.search_runs(filter_string=f"tags.mlflow.parentRunId='{run_id}'", order_by=["metrics.areaUnderROC_unknown_dataset DESC"])
+runs
 
-# temp_tes = datapipeline.transform(test_df)
-# infer 
-
-with mlflow.start_run(nested=True) as run:
-#    model_info = mlflow.spark.log_model(pipeline_model.bestModel, "model")
-    result = mlflow.evaluate(
-       'runs:/4f8ce8bdfa104a8387fc3a1f0d629447/model',
-       test_df,
-       targets='lag_sum_totalIndex',
-       model_type="classifier",
-       evaluators=["default"],
-    )
 
 # COMMAND ----------
 
-result
+runs.iloc[0]
 
 # COMMAND ----------
 
-
+mlflow.register_model(f"runs:/{runs.iloc[0].run_id}/model", "BestModel")
