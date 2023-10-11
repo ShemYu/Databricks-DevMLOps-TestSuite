@@ -78,12 +78,25 @@ training = Task(
     ),
 )
 
+import datetime
+import hashlib
+
+# 取得當前時間的字串表示
+current_time = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')
+
+# 使用 SHA256 來計算 hash
+hash_object = hashlib.sha256(current_time.encode())
+hex_dig = hash_object.hexdigest()
+
+# 將 hash 用作 pipeline name
+pipeline_name = "pipeline-" + hex_dig
+
 
 
 print("Attempting to create the job. Please wait...\n")
 
 j = w.jobs.create(
-  name = "CT pipeline testing",
+  name = pipeline_name,
   tasks = [
     feature_engineering,
     training
