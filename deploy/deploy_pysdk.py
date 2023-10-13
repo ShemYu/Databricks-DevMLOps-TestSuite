@@ -34,7 +34,6 @@ new_cluster_config = open("config/new_cluster_config.json", "r").read()
 config = configparser.ConfigParser()
 config.read("config/config.ini")
 
-
 existing_cluster_id = config["ADMIN"]["existing_cluster_id"]
 repo_path = config["ADMIN"]["repo_path"]
 repos_path_prefix = config["ADMIN"]["repos_path_prefix"]
