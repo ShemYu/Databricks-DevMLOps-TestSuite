@@ -1,6 +1,6 @@
 import os
-from databricks.sdk import WorkspaceClient
 
+from databricks.sdk import WorkspaceClient
 
 job_id = os.environ.get("JOBID")
 w = WorkspaceClient()

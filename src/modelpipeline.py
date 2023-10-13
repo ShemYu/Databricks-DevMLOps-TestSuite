@@ -1,5 +1,6 @@
 # Databricks notebook source
 import mlflow
+
 # %run /Users/sandy1990418@gmail.com/datapipeline
 feature_table_name = "databricks_test_mr_df"
 project_name = "SandyMRRandomForestCalssifier"
@@ -30,18 +31,15 @@ df = spark.sql(f"SELECT * FROM {feature_table_name}")
 
 # COMMAND ----------
 
-from databricks.feature_store import feature_table
-from databricks.feature_store import FeatureStoreClient
-import  pyspark.sql.functions as F 
-from pyspark.sql.functions import when
-from pyspark.ml.feature import StringIndexer, VectorAssembler
-from pyspark.ml.classification import RandomForestClassifier
+import pyspark.sql.functions as F
+from databricks.feature_store import FeatureStoreClient, feature_table
 from pyspark.ml import Pipeline
-from pyspark.ml.feature import StandardScaler
-from pyspark.ml.tuning import ParamGridBuilder
-from pyspark.ml.evaluation import RegressionEvaluator,BinaryClassificationEvaluator
-from pyspark.ml.tuning import CrossValidator
-
+from pyspark.ml.classification import RandomForestClassifier
+from pyspark.ml.evaluation import (BinaryClassificationEvaluator,
+                                   RegressionEvaluator)
+from pyspark.ml.feature import StandardScaler, StringIndexer, VectorAssembler
+from pyspark.ml.tuning import CrossValidator, ParamGridBuilder
+from pyspark.sql.functions import when
 
 #########################################################################
 ############################# load data  ################################
@@ -111,6 +109,7 @@ train_df = datapipeline.transform(train_df)
 
 
 import mlflow
+
 ## autolog model information 
 mlflow.pyspark.ml.autolog(log_models=True)
 model=rf.fit(train_df)
@@ -120,6 +119,7 @@ model=rf.fit(train_df)
 
 
 import mlflow
+
 ## autolog model information 
 mlflow.pyspark.ml.autolog(log_models=True)
 model=rf.fit(train_df)
@@ -127,21 +127,20 @@ model=rf.fit(train_df)
 
 # COMMAND ----------
 
-import seaborn as sns 
-from pyspark.sql import SparkSession
-from pyspark.ml.feature import (VectorAssembler, OneHotEncoder, StringIndexer)
-from pyspark.ml import Pipeline
-from pyspark.ml.classification import (LogisticRegression, RandomForestClassifier, NaiveBayes)
-from pyspark.sql.functions import (col, explode, array, lit)
-from pyspark.ml.evaluation import (BinaryClassificationEvaluator, MulticlassClassificationEvaluator)
-from pyspark.mllib.evaluation import MulticlassMetrics
-from pyspark.sql.types import FloatType
+import matplotlib.pyplot as plt
+import numpy as np
 import pyspark.sql.functions as F
 import seaborn as sns
-import numpy as np
-import matplotlib.pyplot as plt
-
-
+from pyspark.ml import Pipeline
+from pyspark.ml.classification import (LogisticRegression, NaiveBayes,
+                                       RandomForestClassifier)
+from pyspark.ml.evaluation import (BinaryClassificationEvaluator,
+                                   MulticlassClassificationEvaluator)
+from pyspark.ml.feature import OneHotEncoder, StringIndexer, VectorAssembler
+from pyspark.mllib.evaluation import MulticlassMetrics
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import array, col, explode, lit
+from pyspark.sql.types import FloatType
 
 test_df = datapipeline.transform(test_df)
 pred_df = model.transform(test_df)
@@ -169,7 +168,6 @@ confusion_matrix_plot(conf_rfc,'Random Forest Classifier - Confusion Matrix')
 # COMMAND ----------
 
 import matplotlib.pyplot as plt
-
 
 plt.figure(figsize=(5,5))
 plt.plot([0, 1], [0, 1], 'r--')
@@ -239,11 +237,10 @@ search_space = {
 ################################ setting evaluator ###################################
 ######################################################################################
 
-from hyperopt import fmin, tpe, Trials
-import numpy as np
 import mlflow
 import mlflow.spark
-
+import numpy as np
+from hyperopt import Trials, fmin, tpe
 
 # tpe.suggest = search algorithm
 num_evals = 4

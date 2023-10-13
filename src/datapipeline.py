@@ -1,8 +1,7 @@
 # Databricks notebook source
+from databricks.feature_store import FeatureStoreClient, feature_table
 from pyspark.sql.functions import *
 from pyspark.sql.types import *
-from databricks.feature_store import feature_table
-from databricks.feature_store import FeatureStoreClient
 
 table_name = "databricks_test_mr_df"
 
@@ -133,8 +132,8 @@ def merge_all():
     all_temp = all_temp.dropDuplicates(['distinct_id','yyyymm'])
 
 
-    from pyspark.sql import Window
     import pyspark.sql.functions as fn
+    from pyspark.sql import Window
 
     lag_window = Window.partitionBy('distinct_id').orderBy('yyyymm')
     all_temp = all_temp.withColumn(

@@ -7,7 +7,6 @@
 import sys
 from pathlib import Path
 
-
 sys.path.append(Path(__file__).parent)
 
 new_cluster_config = open("config/new_cluster_config.json", "r").read()
@@ -28,8 +27,9 @@ branch = config["TRAINING"]["branch"]
 
 # COMMAND ----------
 
-from argparse import ArgumentParser
 import sys
+from argparse import ArgumentParser
+
 p = ArgumentParser()
 
 p.add_argument("--branch_name", required=False, type=str)
