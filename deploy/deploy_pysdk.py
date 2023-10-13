@@ -1,10 +1,13 @@
+import configparser
 import os
 import sys
-from pathlib import Path
-import configparser
-from databricks.sdk.service.jobs import Task, NotebookTask, Source, GitSource, GitProvider, TaskDependency
-from databricks.sdk import WorkspaceClient
 from argparse import ArgumentParser
+from datetime import timedelta
+from pathlib import Path
+
+from databricks.sdk import WorkspaceClient
+from databricks.sdk.service.jobs import (GitProvider, GitSource, NotebookTask,
+                                         Source, Task, TaskDependency)
 
 p = ArgumentParser()
 
@@ -110,6 +113,6 @@ print(os.environ.get("JOBID"))
 
 ct_job = w.jobs.get(job_id=j.job_id)
 print(ct_job)
-run = w.jobs.run_now_and_wait(job_id=j.job_id)
+run = w.jobs.run_now_and_wait(job_id=j.job_id, timeout=timedelta(days=1))
 print(run)
 
