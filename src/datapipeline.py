@@ -1,4 +1,16 @@
 # Databricks notebook source
+# MAGIC %md
+# MAGIC ## **Datapipeline**
+# MAGIC
+# MAGIC This notebook is designed to read multiple data sources, process, clean, and finally merge them before loading them into a Databricks feature table. The general flow involves reading data from various sources, transforming it, and aggregating the details before storing it for later use in machine learning models or other analytics.
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC #### Import dependency and define table nam
+
+# COMMAND ----------
+
 from databricks.feature_store import FeatureStoreClient, feature_table
 from pyspark.sql.functions import *
 from pyspark.sql.types import *
@@ -9,6 +21,9 @@ table_name = "databricks_test_mr_df"
 
 # MAGIC %md
 # MAGIC #### read data
+# MAGIC
+# MAGIC - catalog -> external data(AWS S3) 設定後就可直接透過 S3 uri 進行讀取
+# MAGIC - AWS S3 可以用 spark.sql、spark.read 讀資料，但是在 header 的部分，spark.sql 的彈性比 spark.read 低
 
 # COMMAND ----------
 
@@ -110,6 +125,16 @@ def mr_cleaned(x):
 
 # COMMAND ----------
 
+# MAGIC %md
+# MAGIC #### merge, dedup, fill na and aggregate
+# MAGIC
+# MAGIC - 數據來源：從四個不同的數據集進行讀取和清理。
+# MAGIC - 數據整合：進行多輪的左連接操作，將四個數據集基於共同的鍵（distinct_id 和 yyyymm）整合到一起。
+# MAGIC - 數據處理：對整合後的數據進行空值處理、去重，並創建新的變數。
+# MAGIC - 結果輸出：產出一個經過整合和後續處理的數據集，可以用於後續的分析或模型建立
+
+# COMMAND ----------
+
 def merge_all():
     point = points_cleaned(read_points())
     main = main_cleaned(read_main())
@@ -145,19 +170,19 @@ def merge_all():
 # COMMAND ----------
 
 
-def load_data():
+# def load_data():
 
-    fs = FeatureStoreClient()
+#     fs = FeatureStoreClient()
 
-    df = merge_all()
-    mr_feature_table = fs.create_table(
-        name='databricks_test_mr_df',
-        primary_keys=['distinct_id','yyyymm'],
-        df = df,
-        schema=df.schema,
-        description='MR dataframe',
-    )
-    return mr_feature_table
+#     df = merge_all()
+#     mr_feature_table = fs.create_table(
+#         name='databricks_test_mr_df',
+#         primary_keys=['distinct_id','yyyymm'],
+#         df = df,
+#         schema=df.schema,
+#         description='MR dataframe',
+#     )
+#     return mr_feature_table
 
 # COMMAND ----------
 
@@ -166,6 +191,11 @@ df = merge_all()
 # COMMAND ----------
 
 df.show(n=5)
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC #### create feature table
 
 # COMMAND ----------
 
@@ -179,6 +209,11 @@ mr_feature_table = fs.create_table(
     schema=df.schema,
     description='MR dataframe',
 )
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC #### Update feature table
 
 # COMMAND ----------
 
